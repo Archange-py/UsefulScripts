@@ -11,9 +11,13 @@ import os
 
 ROOT_PATH: Path = Path(os.path.dirname(__file__))
 PICTURES_PATH: Path = ROOT_PATH / Path(r".\Pictures")
+THEMES_PATH: Path = ROOT_PATH / Path(r".\Themes")
 
 # imported from https://thenounproject.com/icon/code-5946023 & https://thenounproject.com/icon/lock-7697321
 DEFAULT_ICON_PATH: Path = ROOT_PATH / PICTURES_PATH / "pad_bank_picture.ico"
+
+# imported from https://github.com/a13xe/CTkThemesPack
+THEME_PATH: Path = ROOT_PATH / THEMES_PATH
 
 
 class Pad(ctk.CTk):
@@ -22,9 +26,9 @@ class Pad(ctk.CTk):
 
             name: str = 'Pad',
             resize: bool = False,
-            dimension: tuple[int, int] = (500, 600),
-            background: str | tuple[str, str] = 'royalblue',
+            theme: str = "breeze", # or 'system', 'light' and 'dark'
             icon: Path = DEFAULT_ICON_PATH,
+            dimension: tuple[int, int] = (500, 600),
 
             *args, **kwargs
         ):
@@ -37,9 +41,9 @@ class Pad(ctk.CTk):
         Args:
             name (str, optional): The main name of the pad application. Defaults to 'Pad'.
             resize (bool, optional): If you want to change the size of the pad window or not. Defaults to False.
-            dimension (tuple[int, int], optional): The length and the width of the pad window. Defaults to (500, 600).
-            background (str | tuple[str, str], optional): Th colour of the background of the pad window. Defaults to 'royalblue'.
+            theme: (str, optional): A default theme of custom tkinter, or a name of json theme file in the Themes folder.
             icon (Path, optional): A path to change the default icon of the window. Defaults to '.\Pictures\pad_bank_picture.ico'.
+            dimension (tuple[int, int], optional): The length and the width of the pad window. Defaults to (500, 600).            
         """
 
         super().__init__(*args, **kwargs)
@@ -48,11 +52,24 @@ class Pad(ctk.CTk):
         self.icon = icon
         self.resize = resize
         self.dimension = dimension
-        self.background = background
+
+        os.chdir(THEMES_PATH)
+
+        _theme: str = theme + '.json' if not theme.endswith('.json') else theme
+
+        if _theme in os.listdir():
+            self.theme = THEME_PATH / _theme
+            ctk.set_default_color_theme(self.theme)
+
+        else:
+            self.theme = theme
+            ctk.set_appearance_mode(self.theme)
 
         self.secret_code: str = "".join([
             str(randint(0, 9)) for _ in range(4)
         ])
+
+        print(f"The secret code is : {self.secret_code}")
 
         self.numbers_pad: list[str] = sample(
             [str(number) for number in range(10)], 10
@@ -61,11 +78,8 @@ class Pad(ctk.CTk):
         self.number_of_click: int = 0
         self.taped_code: list[str] = ['*'] * 4
 
-        print(f"The secret code is : {self.secret_code}")
-
         self.title(self.name)
         self.iconbitmap(self.icon)
-        self.config(background=self.background)
         self.resizable(self.resize, self.resize)
         self.geometry(f"{self.dimension[0]}x{self.dimension[1]}")
 
@@ -106,10 +120,6 @@ class Pad(ctk.CTk):
         self.button_backspace = ctk.CTkButton(self.pad_frame_2, text='suppr', command=self.suppr, corner_radius=30, font=ctk.CTkFont("arial", 20, 'bold'))
         self.button_backspace.place(relx=0.05, rely=0.75, relwidth=0.9, relheight=0.2)
 
-        # To apply the main background color for each surface
-        for child in self.children.values():
-            child.configure(bg_color=(self.background, self.background))
-
     def suppr(self):
         """A function call to delete numbers show in the label part of the window."""
         self.number_of_click = (self.number_of_click - 1) % 4
@@ -142,8 +152,8 @@ if __name__ == '__main__':
     pad = Pad(
         name="Pad Bank",
         dimension=(500, 600),
-        background='royalblue',
         icon=DEFAULT_ICON_PATH,
+        theme='breeze',
         resize=True
     )
 
