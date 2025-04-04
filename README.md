@@ -11,6 +11,8 @@ This repository contains a collection of more or less useful scripts, including 
 
 They were made by myself, during my NSI specialization classes, and in my spare time. Some projects are the result of collaboration, in which case the people involved are indicated in the script.
 
+Use the [useful_fonctions.ipynb](useful_fonctions.ipynb) to discover each script step-by-step and its own dynamic functions.
+
 You can use the [requirement.txt](requirements.txt) file to install the necessary dependencies for the various projects.
 
 <div style="color: orange; font-weight: bold;">
