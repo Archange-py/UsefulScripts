@@ -1,5 +1,5 @@
 """
-Example du fonctionnement de l'algorithme dit du tri à bulle, extrait du livre de Yan Le Cun
+Example du fonctionnement de l'algorithme dit du tri à bulle, extrait du livre de Yan Le Cun.
 """
 
 from random import randint
@@ -17,5 +17,5 @@ def short(tab):
           echange(tab,i+1,i)
   return tab
 
-tab = [randint(0,100) for _ in range(20)]
+tab = [randint(0, 100) for _ in range(20)]
 print(short(tab))

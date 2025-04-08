@@ -1,5 +1,4 @@
-"""Algorithme de compression sans perte, mis au point par Huffman, 
-utilisé dans les fichiers zip"""
+"""Algorithme de compression sans perte mis au point par Huffman, notamment utilisé dans les fichiers zip."""
 
 class Huffman:
   class TreeBin:
